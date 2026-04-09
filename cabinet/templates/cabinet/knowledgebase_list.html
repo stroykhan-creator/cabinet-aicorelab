@@ -1,0 +1,59 @@
+{% extends 'cabinet/base_dashboard.html' %}
+
+{% block title %}База знаний - DentalAI{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Заголовок -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">База знаний</h1>
+            <p class="text-muted small">Инструкции для обучения вашего ИИ-бота</p>
+        </div>
+        <a href="/admin/cabinet/knowledgebase/add/" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle me-2"></i> Добавить данные
+        </a>
+    </div>
+
+    <!-- Инфо-панель -->
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px; background: linear-gradient(45deg, #4e73df, #224abe); color: white;">
+        <div class="card-body p-4 d-flex align-items-center">
+            <div class="bg-white bg-opacity-20 p-3 rounded-circle me-4">
+                <i class="bi bi-lightbulb fs-2"></i>
+            </div>
+            <div>
+                <h5 class="mb-1 fw-bold">Ваш бот обучен на {{ total_topics }} темах</h5>
+                <p class="mb-0 small opacity-75">ИИ использует эти данные, чтобы отвечать пациентам на вопросы о ценах, врачах и услугах.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список тем (Сетка карточек) -->
+    <div class="row g-4">
+        {% for item in kb_items %}
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-primary mb-0">{{ item.topic }}</h5>
+                        <a href="/admin/cabinet/knowledgebase/{{ item.id }}/change/" class="btn btn-sm btn-outline-light text-muted border-0">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    </div>
+                    <p class="text-muted small" style="line-height: 1.6;">
+                        {{ item.information|truncatewords:40 }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="text-muted">
+                <i class="bi bi-journal-x display-1 opacity-25"></i>
+                <p class="mt-3">База знаний пуста. Добавьте первую тему через админку.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

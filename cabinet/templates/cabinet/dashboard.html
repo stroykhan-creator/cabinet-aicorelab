@@ -1,0 +1,73 @@
+{% extends 'cabinet/base_dashboard.html' %}
+
+{% block title %}Дашборд - DentalAI{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Заголовок клиники -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">{{ company.name }}</h1>
+            <p class="text-muted small">Главная панель управления</p>
+        </div>
+        <div class="badge bg-success bg-opacity-10 text-success p-2 px-3 rounded-pill">
+            <i class="bi bi-robot me-2"></i> Бот активен
+        </div>
+    </div>
+
+    <!-- Карточки статистики -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 text-center" style="border-radius: 15px;">
+                <div class="text-muted small text-uppercase fw-bold">Пациентов в базе</div>
+                <div class="display-5 fw-bold text-primary">{{ total_patients }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 text-center" style="border-radius: 15px;">
+                <div class="text-muted small text-uppercase fw-bold">Сообщений ИИ</div>
+                <div class="display-5 fw-bold text-dark">{{ total_messages }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 text-center" style="border-radius: 15px;">
+                <div class="text-muted small text-uppercase fw-bold">Записано на прием</div>
+                <div class="display-5 fw-bold text-success">{{ funnel.Записан }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Воронка продаж -->
+    <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px;">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-4">Этапы воронки (Outreach)</h5>
+            
+            <div class="d-flex flex-column gap-2">
+                <!-- Шаг: Отправлено -->
+                <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background-color: #f8f9fa;">
+                    <span><i class="bi bi-send me-3 text-secondary"></i>Первое сообщение</span>
+                    <span class="badge bg-secondary rounded-pill">{{ funnel.Отправлено }}</span>
+                </div>
+
+                <!-- Шаг: Диалог -->
+                <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background-color: #e7f1ff;">
+                    <span><i class="bi bi-chat-dots me-3 text-primary"></i>Вступили в диалог</span>
+                    <span class="badge bg-primary rounded-pill">{{ funnel.Диалог }}</span>
+                </div>
+
+                <!-- Шаг: Интерес -->
+                <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background-color: #fff8e1;">
+                    <span><i class="bi bi-fire me-3 text-warning"></i>Проявили интерес</span>
+                    <span class="badge bg-warning text-dark rounded-pill">{{ funnel.ИНТЕРЕС }}</span>
+                </div>
+
+                <!-- Шаг: Записан -->
+                <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background-color: #e8f5e9;">
+                    <span><i class="bi bi-calendar-check me-3 text-success"></i>Записаны в клинику</span>
+                    <span class="badge bg-success rounded-pill">{{ funnel.Записан }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

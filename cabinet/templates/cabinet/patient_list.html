@@ -1,0 +1,98 @@
+{% extends 'cabinet/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}База пациентов - DentalAI{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Заголовок -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 text-dark">База пациентов</h1>
+            <p class="text-muted">Управление контактами клиники {{ company.name }}</p>
+        </div>
+        <a href="/admin/cabinet/patient/bulk-import/" class="btn btn-primary shadow-sm">
+            <i class="bi bi-cloud-upload-fill me-2"></i> Загрузить Excel
+        </a>
+    </div>
+
+    <!-- Карточки статистики -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3" style="border-radius: 15px;">
+                <div class="text-muted small">Всего в базе</div>
+                <div class="h4 mb-0 fw-bold">{{ stats.total }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3" style="border-radius: 15px;">
+                <div class="text-muted small">В работе</div>
+                <div class="h4 mb-0 fw-bold text-warning">{{ stats.active }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3" style="border-radius: 15px;">
+                <div class="text-muted small">Записано</div>
+                <div class="h4 mb-0 fw-bold text-success">{{ stats.success }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица -->
+    <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="card-body p-4">
+            <form method="get" class="mb-4">
+                <div class="input-group" style="max-width: 400px;">
+                    <input type="text" name="q" class="form-control" placeholder="Поиск пациента..." value="{{ search_query }}">
+                    <button class="btn btn-primary" type="submit">Найти</button>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Имя</th>
+                            <th>Телефон</th>
+                            <th>Статус</th>
+                            <th>След. контакт</th>
+                                                <th class="text-end">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in patients %}
+                        <tr>
+                            <td class="fw-bold">{{ p.name }}</td>
+                            <td>{{ p.phone }}</td>
+                            <td>
+                                {% if p.current_status == 'ОТКАЗ' %}
+                                    <span class="badge bg-danger">Отказ</span>
+                                {% elif p.current_status == 'ИНТЕРЕС' %}
+                                    <span class="badge bg-warning text-dark">Интерес 🔥</span>
+                                {% elif p.current_status == 'Записан' %}
+                                    <span class="badge bg-success">Записан ✅</span>
+                                {% elif p.current_status == 'Диалог' %}
+                                    <span class="badge bg-primary">Диалог</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Не начат</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ p.next_contact|date:"d.m.Y"|default:"—" }}</td>
+                            <td class="text-end">
+                                <a href="/admin/cabinet/patient/{{ p.id }}/change/" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">Пациенты не найдены</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

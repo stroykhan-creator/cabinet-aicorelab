@@ -1,0 +1,4 @@
+PassengerEnabled On
+PassengerAppRoot /home/l/layerg/cabinet.aicorelab.ru/public_html
+PassengerPython /home/l/layerg/cabinet.aicorelab.ru/public_html/venv/bin/python
+PassengerFriendlyErrorPages on
