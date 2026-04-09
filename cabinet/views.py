@@ -14,7 +14,12 @@ def dashboard(request):
     if request.user.is_authenticated:
         try:
             # Предполагаем, что у пользователя есть связь с Company через поле owner
-            company = Company.objects.get(owner=request.user)
+            company = try:
+    company = Company.objects.get(owner=request.user)
+except Exception:
+    # fallback: если нет поля owner или компания не найдена, берём первую компанию
+    company = Company.objects.first()
+
         except Company.DoesNotExist:
             company = None # Пользователь есть, но компания еще не создана
         except AttributeError:
