@@ -75,11 +75,3 @@ def registration_company(request):
 
     context = {'form': form}
     return render(request, 'cabinet/registration.html', context)
-
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-
-@login_required
-def pending_approval(request):
-    # Временная заглушка — позже можно вернуть рендер шаблона
-    return HttpResponse("Pending approval page (temporary)")
