@@ -1,0 +1,15 @@
+    {% extends 'admin/change_list.html' %}
+    {% load i18n admin_urls static %}
+
+    {# Добавляем новый элемент в блок object-tools-items #}
+    {% block object-tools-items %}
+        {{ block.super }} {# Выводит существующие стандартные кнопки (например, "Добавить пациента") #}
+        <li>
+            {# Создаем ссылку на наш новый URL для импорта CSV #}
+            {# Имя URL 'cabinet_patient_import_csv_admin' определено в admin.py в методе get_urls #}
+            {% url 'cabinet_patient_import_csv_admin' as import_csv_url %}
+            <a href="{{ import_csv_url }}" class="addlink">
+                {% translate 'Импорт из CSV' %}
+            </a>
+        </li>
+    {% endblock %}

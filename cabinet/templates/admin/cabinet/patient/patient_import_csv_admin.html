@@ -1,0 +1,81 @@
+    {% extends 'admin/base_site.html' %} {# Наследуемся от базового шаблона админки #}
+    {% load i18n admin_urls static %} {# Загружаем нужные теги шаблонов #}
+
+    {# Задаем хлебные крошки для навигации #}
+    {% block breadcrumbs %}
+    <div class="breadcrumbs">
+        {# Ссылки для навигации по админке #}
+        <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+        &rsaquo; <a href="{% url 'admin:app_list' app_label='cabinet' %}">Cabinet</a>
+        &rsaquo; <a href="{% url 'admin:cabinet_patient_changelist' %}">{% translate 'Пациенты' %}</a>
+        &rsaquo; {% translate 'Импорт из CSV' %}
+    </div>
+    {% endblock %}
+
+    {# Основное содержимое страницы #}
+    {% block content %}
+    <div id="content-main">
+        {# Форма для загрузки файла #}
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %} {# CSRF токен обязателен для POST-форм #}
+            <fieldset class="module aligned"> {# Используем стандартный класс модуля админки для стилизации #}
+                <h2>{% translate 'Импорт пациентов из CSV' %}</h2> {# Заголовок формы #}
+
+                {# Отображение системных сообщений (ошибки, успехи, предупреждения) #}
+                {% if messages %}
+                    <ul class="messagelist">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {# Отображение списка ошибок валидации CSV файла (если есть ошибки в строках) #}
+                {% if errors_list %}
+                    <ul class="messagelist">
+                        <li class="error">{% translate 'При импорте были обнаружены следующие ошибки:' %}
+                            <ul>
+                                {% for error in errors_list %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
+
+                {# Поле для загрузки файла #}
+                <div class="form-row">
+                    {{ form.csv_file.errors }} {# Отображение ошибок для поля 'csv_file' #}
+                    <label class="required" for="{{ form.csv_file.id_for_label }}">{{ form.csv_file.label }}:</label> {# Метка поля #}
+                                        {{ form.csv_file }} {# Само поле для ввода файла #}
+                    {% if form.csv_file.help_text %}<p class="help">{{ form.csv_file.help_text }}</p>{% endif %} {# Подсказка для поля #}
+                </div>
+
+                {# Кнопки отправки формы и отмены #}
+                <div class="submit-row">
+                    <input type="submit" value="{% translate 'Импортировать пациентов' %}" class="default"> {# Кнопка для отправки формы #}
+                    <p class="deletelink-box"> {# Стилизация для кнопки отмены #}
+                        <a href="{% url 'admin:cabinet_patient_changelist' %}" class="deletelink">{% translate 'Отмена' %}</a> {# Ссылка на страницу списка пациентов #}
+                    </p>
+                </div>
+            </fieldset>
+        </form>
+
+        {# Блок с информацией о требуемой структуре CSV #}
+        <div class="module" id="csv-structure-info">
+            <h2>{% translate 'Структура CSV файла для импорта:' %}</h2>
+            <div class="form-row field-help">
+                <p>{% translate 'Ваш CSV файл должен быть в кодировке UTF-8 и иметь следующие заголовки в первой строке (строго в таком написании):' %}</p>
+                <pre><code>first_name,last_name,email,phone,date_of_birth,notes</code></pre>
+                <p>{% translate 'Пример данных:' %}</p>
+                <pre><code>Иван,Иванов,ivan.ivanov@example.com,+79123456789,1990-01-15,Заинтересован в новой услуге
+Мария,Петрова,maria.petrova@example.com,+79876543210,1985-05-20,Нужна консультация
+Аноним,,,anon@example.com,,Просто тестовый клиент</code></pre>
+                <ul>
+                    <li>{% translate 'Поле <code>date_of_birth</code> должно быть в формате <b>ГГГГ-ММ-ДД</b>.' %}</li>
+                    <li>{% translate 'Поля <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>, <code>notes</code> могут быть пустыми, но для каждой строки должен быть указан хотя бы <b>телефон</b> или <b>email</b>.' %}</li>
+                    <li>{% translate 'Если <code>first_name</code> и <code>last_name</code> пусты, поле <code>name</code> в базе данных будет "Не указано".' %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

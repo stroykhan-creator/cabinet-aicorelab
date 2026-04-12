@@ -1,1 +1,1 @@
-# sales_tool app package
+# sales_tool package
