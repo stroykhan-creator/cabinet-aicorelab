@@ -1,7 +1,9 @@
-*.bak
-*.backup
-db.sqlite3
-venv/
-logs/
 *.pyc
 __pycache__/
+db.sqlite3
+venv/
+.env
+static/
+media/
+post_media/
+*.bak*

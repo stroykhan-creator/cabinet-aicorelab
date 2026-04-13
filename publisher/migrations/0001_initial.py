@@ -9,7 +9,10 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('cabinet', '0008_alter_company_options_alter_knowledgebase_options_and_more'),
+        ('auth', '0001_initial'),  # Пример общих зависимостей, у вас могут быть свои
+        ('contenttypes', '0001_initial'),
+        # ('cabinet', '0001_initial'),  # <<< Эта строка УДАЛЕНА
+        # Удалите здесь любые другие строки, ссылающиеся на 'cabinet'
     ]
 
     operations = [
@@ -41,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PostLog',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                            ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('group_id', models.CharField(max_length=255, verbose_name='ID конкретной группы')),
                 ('status', models.CharField(max_length=50, verbose_name='Статус')),
                 ('response', models.TextField(blank=True, null=True, verbose_name='Ответ API')),
@@ -75,3 +78,4 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(to='publisher.socialgroup', verbose_name='Списки для публикации'),
         ),
     ]
+    
