@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('cabinet', '0008_alter_company_options_alter_knowledgebase_options_and_more'),
+        ('cabinet', '0001_initial'),
     ]
 
     operations = [
